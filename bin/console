@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH << File.expand_path('../lib', __dir__)
+
+require_relative "../init"
+require "irb"
+
+include Hubbado::Trailblazer
+
+IRB.start
