@@ -1,14 +1,12 @@
-# -*- encoding: utf-8 -*-
 Gem::Specification.new do |s|
   s.name = "hubbado-trailblazer"
-  s.version = "0.0.0"
-  s.summary = ""
+  s.version = "1.0.0"
+  s.summary = "Enhanced Trailblazer operation utilities for Ruby applications with improved error handling, operation execution patterns, and ActiveRecord integration."
 
   s.authors = ["Hubbado Devs"]
-  s.authors = ["devs@hubbado.com"]
+  s.email = ["devs@hubbado.com"]
   s.homepage = 'https://github.com/hubbado/hubbado-trailblazer'
 
-  s.metadata["allowed_push_host"] = "https://rubygems.pkg.github.com/hubbado"
   s.metadata["github_repo"] = s.homepage
   s.metadata["homepage_uri"] = s.homepage
   s.metadata["changelog_uri"] = "#{s.homepage}/blob/master/CHANGELOG.md"
