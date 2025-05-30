@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "hubbado-trailblazer"
-  s.version = "1.0.0"
+  s.version = "1.0.1"
   s.summary = "Enhanced Trailblazer operation utilities for Ruby applications with improved error handling, operation execution patterns, and ActiveRecord integration."
 
   s.authors = ["Hubbado Devs"]
