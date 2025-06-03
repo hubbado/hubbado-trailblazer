@@ -22,11 +22,11 @@ Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
   s.required_ruby_version = ">= 3.2"
 
-  s.add_dependency "activerecord"
   s.add_dependency "evt-template_method"
   s.add_dependency "hubbado-log"
   s.add_dependency "trailblazer-operation"
 
+  s.add_development_dependency "activerecord"
   s.add_development_dependency "debug"
   s.add_development_dependency "dry-validation"
   s.add_development_dependency "sqlite3"

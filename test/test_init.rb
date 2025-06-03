@@ -8,6 +8,8 @@ puts "TEST_BENCH_DETAIL: #{ENV["TEST_BENCH_DETAIL"].inspect}"
 puts
 
 require_relative "../init.rb"
+require "active_record"
+
 
 require "reform"
 require "reform/form/dry"

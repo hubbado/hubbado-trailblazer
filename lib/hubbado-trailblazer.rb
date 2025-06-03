@@ -1,4 +1,3 @@
-require 'active_record'
 require 'hubbado/log'
 require 'template_method'
 require 'trailblazer/operation'
