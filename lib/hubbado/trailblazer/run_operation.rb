@@ -73,13 +73,11 @@ module Hubbado
 
       def run_operation(operation, params = self.params, *options)
         trace_operation = TraceOperation.(operation)
-        operation_method = trace_operation ? 'wtf?' : 'call'
-
         operation_arguments = { params: _run_params(params) }
         operation_arguments[:request] = request if respond_to?(:request)
         operation_arguments.merge!(*_run_runtime_options(*options))
 
-        ctx = operation.send(operation_method, operation_arguments)
+        ctx = operation.(operation_arguments)
 
         result = Result.new(operation, ctx, trace_operation)
 
