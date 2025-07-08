@@ -7,11 +7,11 @@ module Hubbado
       # For example, a contract, for a not yet saved assignment, might have
       # timesheet approvers that depend on the client company ID in the
       # contract
-      def self.PrepopulateContract(key:)
+      def self.PrepopulateContract(key: nil)
         task = ->((ctx, flow_options), _) do
-          ctx[:prepopulated_contract] = key
+          ctx[:prepopulated_contract] = key ? key : true
 
-          params = ctx[:params][key]
+          params = key ? ctx[:params][key] : ctx[:params]
 
           return ::Trailblazer::Activity::Right, [ctx, flow_options] unless params
 
