@@ -38,6 +38,10 @@ context "Hubbado" do
           assert contract.name == "A name"
         end
 
+        test 'Sets prepopulated_contract to key in context' do
+          assert context[:prepopulated_contract] == params_key
+        end
+
         context "when params are empty" do
           context = { params: {} }
           signal, (ctx, fl_options) = task_hash[:task].([context, flow_options], nil)
