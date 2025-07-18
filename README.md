@@ -137,8 +137,14 @@ Prepopulate Reform contracts with values from params without validation:
 class Users::Edit < Trailblazer::Operation
   step Model(User, :find)
   step Contract::Build(constant: Users::UpdateContract)
-  step Hubbado::Trailblazer::Macro::PrepopulateContract()
+  step Hubbado::Trailblazer::Macro::DeserializeContractParams()
 end
+```
+
+In addition, there is a RSpec matcher `have_deserialized_params` for this macro and
+has to be required manually:
+```ruby
+require 'hubbado/trailblazer/rspec_matchers/have_deserialized_params'
 ```
 
 ## Operation Tracing

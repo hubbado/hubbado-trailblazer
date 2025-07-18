@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [x.x.x] - xxxx-xx-xx
 
+### Added
+
+- rspec matcher `:have_deserialized_params` for DeserializeContractParams
+
 ### Changed
 
 - PrepopulateContract is renamed to DeserializeContractParams
