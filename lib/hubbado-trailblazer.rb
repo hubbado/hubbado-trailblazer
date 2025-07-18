@@ -11,4 +11,4 @@ require 'hubbado/trailblazer/trace_operation'
 
 require 'hubbado/trailblazer/macro/decorate_model'
 require 'hubbado/trailblazer/macro/policy'
-require 'hubbado/trailblazer/macro/prepopulate_contract'
+require 'hubbado/trailblazer/macro/deserialize_contract_params'
