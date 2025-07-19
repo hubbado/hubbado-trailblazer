@@ -7,9 +7,9 @@ module Hubbado
       # For example, a contract, for a not yet saved assignment, might have
       # timesheet approvers that depend on the client company ID in the
       # contract
-      def self.PrepopulateContract(key: nil)
+      def self.DeserializeContractParams(key: nil)
         task = ->((ctx, flow_options), _) do
-          ctx[:prepopulated_contract] = key ? key : true
+          ctx[:deserialized_params] = key || true
 
           params = key ? ctx[:params][key] : ctx[:params]
 
@@ -20,7 +20,7 @@ module Hubbado
           [::Trailblazer::Activity::Right, [ctx, flow_options]]
         end
 
-        { task: task, id: "PrepopulateContract" }
+        { task: task, id: "DeserializeContractParams" }
       end
     end
   end
