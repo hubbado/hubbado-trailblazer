@@ -26,7 +26,9 @@ context "Hubbado" do
 
         context "Build" do
           test "returns a Condition instance" do
-            condition = Hubbado::Trailblazer::Macro::Policy.build(PolicyKlass, :show, :model)
+            condition = Hubbado::Trailblazer::Macro::Policy.build(
+              PolicyKlass, :show, :model, :current_user
+            )
 
             assert condition.class == Hubbado::Trailblazer::Macro::Policy::Condition
           end

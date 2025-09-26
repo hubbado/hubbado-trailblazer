@@ -113,7 +113,23 @@ Enhanced policy handling for use with Hubbado::Policy:
 
 ```ruby
 class Users::Update < Trailblazer::Operation
-  step Hubbado::Trailblazer::Macro::Policy(Users::UpdatePolicy)
+  step Hubbado::Trailblazer::Macro::Policy(Users::UpdatePolicy, :update)
+  # ... other steps
+end
+```
+
+Can also configure model key context, default to `:model`
+```ruby
+class Users::Update < Trailblazer::Operation
+  step Hubbado::Trailblazer::Macro::Policy(Users::UpdatePolicy, :update, model: :user)
+  # ... other steps
+end
+```
+
+Can also configure actor key context, default to `:current_user`
+```ruby
+class Users::Update < Trailblazer::Operation
+  step Hubbado::Trailblazer::Macro::Policy(Users::UpdatePolicy, :update, actor: :current_account)
   # ... other steps
 end
 ```

@@ -6,15 +6,15 @@ context "Hubbado" do
       context "Policy" do
         context "Condition" do
           Policy = Class.new do
-            def self.build(current_user, model)
-              new(current_user, model)
+            def self.build(actor, model)
+              new(actor, model)
             end
 
-            attr_reader :current_user
+            attr_reader :actor
             attr_reader :model
 
-            def initialize(current_user, model)
-              @current_user = current_user
+            def initialize(actor, model)
+              @actor = actor
               @model = model
             end
 
@@ -33,7 +33,9 @@ context "Hubbado" do
             end
           end
 
-          condition = Hubbado::Trailblazer::Macro::Policy::Condition.new(Policy, :show, :model)
+          condition = Hubbado::Trailblazer::Macro::Policy::Condition.new(
+            Policy, :show, :model, :current_user
+          )
           options = { current_user: "A user", model: "A model" }
           result = condition.([options, nil])
 
@@ -45,9 +47,31 @@ context "Hubbado" do
             policy = result.to_hash[:policy]
             policy_result = result.to_hash[:policy_result]
 
-            assert policy.current_user == "A user"
+            assert policy.actor == "A user"
             assert policy.model == "A model"
             assert policy_result.permitted? == true
+          end
+
+          context "Another kind of actor" do
+            condition = Hubbado::Trailblazer::Macro::Policy::Condition.new(
+              Policy, :show, :model, :current_account
+            )
+            options = { current_account: "An account", model: "A model" }
+            result = condition.([options, nil])
+
+
+            test "returns policy result in a trailblazer operation result" do
+              assert result.success?
+            end
+
+            test "returns policy in a trailblazer operation result" do
+              policy = result.to_hash[:policy]
+              policy_result = result.to_hash[:policy_result]
+
+              assert policy.actor == "An account"
+              assert policy.model == "A model"
+              assert policy_result.permitted? == true
+            end
           end
         end
       end
