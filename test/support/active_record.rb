@@ -8,9 +8,11 @@ ActiveRecord::Base.establish_connection(
 
 ActiveRecord::Base.logger = Logger.new(STDOUT) if ENV['DEBUG']
 
-ActiveRecord::Schema.define do
-  create_table :users do |t|
-    t.string :name, null: false
+ActiveRecord::Migration.suppress_messages do
+  ActiveRecord::Schema.define do
+    create_table :users do |t|
+      t.string :name, null: false
+    end
   end
 end
 
