@@ -16,6 +16,10 @@ module Hubbado
     #    result.raise_policy_failed
     #  end
     #
+    #  result.not_found do |ctx|
+    #    ...
+    #  end
+    #
     #  result.validation_failed do |ctx|
     #    ...
     #  end
@@ -33,6 +37,9 @@ module Hubbado
     #
     # If there is a policy failure and you have not implemented
     # `result.policy_failed` then an exception will be raised.
+    #
+    # If the operation has not_found terminus and you have not
+    # implemented `result.not_found` then ActiveRecord::RecordNotFound will be raised.
     #
     # If the operation fails (due to non-policy error) and you have not
     # implemented `result.otherwise` then an exception will be raised.
@@ -87,7 +94,9 @@ module Hubbado
 
         if ctx['result.policy.default']&.failure?
           result.raise_policy_failed unless result.policy_failed_executed?
-        elsif ctx.failure? && !result.validation_failed_executed? && !result.otherwise_executed?
+        elsif !result.not_found_executed? && ctx.terminus.to_h[:semantic] == :not_found
+          result.raise_not_found
+        elsif ctx.failure? && !result.validation_failed_executed? && !result.not_found_executed? && !result.otherwise_executed?
           result.raise_operation_failed
         end
 
@@ -159,6 +168,16 @@ module Hubbado
           @returned
         end
 
+        def not_found
+          return unless ctx.terminus.to_h[:semantic] == :not_found
+
+          @not_found_executed = true
+          @returned = yield(ctx)
+
+          logger.send(log_level, "Not found block executed for operation #{operation}")
+          @returned
+        end
+
         def otherwise
           return if executed?
 
@@ -167,6 +186,12 @@ module Hubbado
 
           logger.send(log_level, "Otherwise block executed for operation #{operation}")
           @returned
+        end
+
+        def raise_not_found
+          msg = "Record for operation #{operation.name} not found"
+
+          raise ActiveRecord::RecordNotFound, msg
         end
 
         def raise_operation_failed
@@ -203,6 +228,10 @@ module Hubbado
           !!@validation_failed_executed
         end
 
+        def not_found_executed?
+          !!@not_found_executed
+        end
+
         def otherwise_executed?
           !!@otherwise_executed
         end
@@ -211,6 +240,7 @@ module Hubbado
           success_executed? ||
             policy_failed_executed? ||
             validation_failed_executed? ||
+            not_found_executed? ||
             otherwise_executed?
         end
 
