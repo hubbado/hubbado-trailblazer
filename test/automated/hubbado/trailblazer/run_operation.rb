@@ -5,6 +5,10 @@ context "Hubbado" do
     context "RunOperation" do
       include Hubbado::Trailblazer::RunOperation
 
+      def policy_unauthorized_message(ctx, operation_name:)
+        "Operation #{operation_name} not allowed for data: #{ctx[:data]}"
+      end
+
       class TestContract < Reform::Form
         property :valid, virtual: true
 
@@ -232,7 +236,9 @@ context "Hubbado" do
 
       context 'when there is no failed_policy block' do
         test 'raises an exception when the policy fails' do
-          assert_raises Hubbado::Trailblazer::Errors::Unauthorized do
+          exception_message = "Operation RunOperationTestOperation not allowed for data: data"
+
+          assert_raises Hubbado::Trailblazer::Errors::Unauthorized, exception_message do
             run_operation RunOperationTestOperation, allowed: false, valid: true, success: true
           end
         end

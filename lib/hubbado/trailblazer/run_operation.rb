@@ -74,6 +74,10 @@ module Hubbado
         ctx
       end
 
+      template_method :policy_unauthorized_message do |ctx, operation_name:|
+        "User #{ctx[:current_user]&.id} not allowed to run #{operation_name}"
+      end
+
       def _run_runtime_options(ctx = {}, *dependencies)
         [_run_options(ctx), *dependencies]
       end
@@ -88,7 +92,15 @@ module Hubbado
 
         ctx = operation.send(operation_method, operation_arguments)
 
-        result = Result.new(operation, ctx, trace_operation)
+        result = Result.new(
+          operation,
+          ctx,
+          trace_operation: trace_operation,
+          policy_unauthorized_message: policy_unauthorized_message(
+            ctx,
+            operation_name: operation.name
+          )
+        )
 
         yield(result) if block_given?
 
@@ -108,11 +120,13 @@ module Hubbado
 
         attr_reader :returned
         attr_reader :trace_operation
+        attr_reader :policy_unauthorized_message
 
-        def initialize(operation, ctx, trace_operation)
+        def initialize(operation, ctx, trace_operation:, policy_unauthorized_message:)
           @operation = operation
           @ctx = ctx
           @trace_operation = trace_operation
+          @policy_unauthorized_message = policy_unauthorized_message
         end
 
         def log_level
@@ -207,13 +221,10 @@ module Hubbado
         end
 
         def raise_policy_failed
-          current_user = ctx[:current_user]
-          true_user = ctx[:true_user]
-
-          msg = "User #{current_user&.id}/#{true_user&.id} (#{current_user&.roles&.join ', '}) " \
-                "not allowed to run #{operation.name}"
-
-          raise Hubbado::Trailblazer::Errors::Unauthorized.new(msg, ctx['result.policy.default'][:policy_result])
+          raise Hubbado::Trailblazer::Errors::Unauthorized.new(
+            policy_unauthorized_message,
+            ctx['result.policy.default'][:policy_result]
+          )
         end
 
         def success_executed?
