@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "debug"
   s.add_development_dependency "dry-validation"
   s.add_development_dependency "sqlite3"
+  s.add_development_dependency "ostruct"
   s.add_development_dependency "hubbado-style"
   s.add_development_dependency "reform"
   s.add_development_dependency "test_bench"
