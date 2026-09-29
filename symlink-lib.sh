@@ -51,7 +51,7 @@ function symlink-lib {
 
     echo "- symlinking $entry_basename to $dest_item"
 
-    cmd="ln -s $entry $dest_item"
+    cmd="ln -sfn $entry $dest_item"
     echo $cmd
     ($cmd)
   done
@@ -62,3 +62,4 @@ function symlink-lib {
 }
 
 symlink-lib "hubbado-trailblazer"
+symlink-lib "trailblazer" "hubbado"
